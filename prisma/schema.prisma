@@ -1,0 +1,42 @@
+// This is your updated Prisma schema file for Prisma 7
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  // Note: url is removed here because it's handled in prisma.config.ts!
+}
+
+// 1. Person Model
+model Person {
+  id               Int     @id @default(autoincrement())
+  firstName        String
+  lastName         String
+  aliases          String? // Store aliases as a comma-separated string (e.g., "Keanu, The One")
+  
+  // Implicit Many-to-Many Relationships
+  moviesAsActor    Movie[] @relation("Casting")
+  moviesAsDirector Movie[] @relation("Directors")
+  moviesAsProducer Movie[] @relation("Producers")
+}
+
+// 2. Movie Model
+model Movie {
+  id          Int      @id @default(autoincrement())
+  title       String
+  releaseYear Int      // We store it as an Int (e.g. 2026) and convert to Roman Numerals on the fly in our API
+  
+  // Implicit Many-to-Many Relationships
+  casting     Person[] @relation("Casting")
+  directors   Person[] @relation("Directors")
+  producers   Person[] @relation("Producers")
+}
+
+// 3. User Model (For Authentication later)
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+}
