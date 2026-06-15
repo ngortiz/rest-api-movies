@@ -15,8 +15,10 @@ import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { PersonEntity } from './entities/person.entity';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('persons')
+@ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class PersonsController {
   constructor(private readonly personsService: PersonsService) {}

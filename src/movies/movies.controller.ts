@@ -15,8 +15,10 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { MovieEntity } from './entities/movie.entity';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('movies')
+@ApiBearerAuth()
 // This interceptor tells NestJS to run our Entity classes through class-transformer!
 @UseInterceptors(ClassSerializerInterceptor)
 export class MoviesController {
