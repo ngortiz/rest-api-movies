@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { PersonEntity } from '../../persons/entities/person.entity';
 
 export class MovieEntity {
@@ -15,6 +15,7 @@ export class MovieEntity {
   @Type(() => PersonEntity)
   producers?: PersonEntity[];
 
+  @Expose()
   // Convertimos el año a número romano al vuelo en la serialización
   get releaseYearRoman(): string {
     let num = this.releaseYear;
