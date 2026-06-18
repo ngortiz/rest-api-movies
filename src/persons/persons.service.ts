@@ -42,14 +42,26 @@ export class PersonsService {
   }
 
   // Retrieve all persons, including the movies they participated in
-  async findAll() {
-    return this.prisma.person.findMany({
-      include: {
-        moviesAsActor: true,
-        moviesAsDirector: true,
-        moviesAsProducer: true,
-      },
-    });
+  async findAll(
+    paginationDto: import('../common/dto/pagination.dto').PaginationDto,
+  ): Promise<{ data: import('@prisma/client').Person[]; total: number }> {
+    const { page = 1, limit = 10 } = paginationDto;
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.prisma.person.findMany({
+        skip,
+        take: limit,
+        include: {
+          moviesAsActor: true,
+          moviesAsDirector: true,
+          moviesAsProducer: true,
+        },
+      }),
+      this.prisma.person.count(),
+    ]);
+
+    return { data, total };
   }
 
   // Retrieve a single person by ID, including their movies

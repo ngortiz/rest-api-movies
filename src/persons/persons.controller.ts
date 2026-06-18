@@ -9,6 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Query,
 } from '@nestjs/common';
 import { PersonsService } from './persons.service';
 import { CreatePersonDto } from './dto/create-person.dto';
@@ -16,6 +17,7 @@ import { UpdatePersonDto } from './dto/update-person.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { PersonEntity } from './entities/person.entity';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Controller('persons')
 @ApiBearerAuth()
@@ -33,9 +35,16 @@ export class PersonsController {
   }
 
   @Get()
-  async findAll(): Promise<PersonEntity[]> {
-    const persons = await this.personsService.findAll();
-    return persons.map((person) => new PersonEntity(person));
+  async findAll(
+    @Query() paginationDto: PaginationDto,
+  ): Promise<{ data: PersonEntity[]; total: number; page: number; limit: number }> {
+    const { data, total } = await this.personsService.findAll(paginationDto);
+    return {
+      data: data.map((person) => new PersonEntity(person)),
+      total,
+      page: paginationDto.page || 1,
+      limit: paginationDto.limit || 10,
+    };
   }
 
   @Get(':id')

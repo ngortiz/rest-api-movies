@@ -30,10 +30,22 @@ export class MoviesService {
     });
   }
 
-  async findAll(): Promise<Movie[]> {
-    return this.prisma.movie.findMany({
-      include: { casting: true, directors: true, producers: true },
-    });
+  async findAll(
+    paginationDto: import('../common/dto/pagination.dto').PaginationDto,
+  ): Promise<{ data: Movie[]; total: number }> {
+    const { page = 1, limit = 10 } = paginationDto;
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.prisma.movie.findMany({
+        skip,
+        take: limit,
+        include: { casting: true, directors: true, producers: true },
+      }),
+      this.prisma.movie.count(),
+    ]);
+
+    return { data, total };
   }
 
   async findOne(id: number): Promise<Movie> {

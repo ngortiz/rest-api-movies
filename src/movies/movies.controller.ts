@@ -9,6 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Query,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -16,6 +17,7 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { MovieEntity } from './entities/movie.entity';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Controller('movies')
 @ApiBearerAuth()
@@ -32,9 +34,16 @@ export class MoviesController {
   }
 
   @Get()
-  async findAll(): Promise<MovieEntity[]> {
-    const movies = await this.moviesService.findAll();
-    return movies.map((movie) => new MovieEntity(movie));
+  async findAll(
+    @Query() paginationDto: PaginationDto,
+  ): Promise<{ data: MovieEntity[]; total: number; page: number; limit: number }> {
+    const { data, total } = await this.moviesService.findAll(paginationDto);
+    return {
+      data: data.map((movie) => new MovieEntity(movie)),
+      total,
+      page: paginationDto.page || 1,
+      limit: paginationDto.limit || 10,
+    };
   }
 
   @Get(':id')
