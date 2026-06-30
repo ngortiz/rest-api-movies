@@ -34,9 +34,12 @@ export class MoviesController {
   }
 
   @Get()
-  async findAll(
-    @Query() paginationDto: PaginationDto,
-  ): Promise<{ data: MovieEntity[]; total: number; page: number; limit: number }> {
+  async findAll(@Query() paginationDto: PaginationDto): Promise<{
+    data: MovieEntity[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
     const { data, total } = await this.moviesService.findAll(paginationDto);
     return {
       data: data.map((movie) => new MovieEntity(movie)),

@@ -20,10 +20,12 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const payload = await this.jwtService.verifyAsync(token, {
         secret: 'SECRET_KEY_FOR_JWT', // Must match the secret in AuthModule!
       });
       // Attach the user information to the request object
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       request['user'] = payload;
     } catch {
       throw new UnauthorizedException('Invalid or expired token');

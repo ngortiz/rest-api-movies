@@ -8,7 +8,7 @@ describe('PersonsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PersonsController],
-      providers: [PersonsService],
+      providers: [PersonsService, { provide: require("../prisma/prisma.service").PrismaService, useValue: {} }, { provide: require("@nestjs/jwt").JwtService, useValue: {} }],
     }).compile();
 
     controller = module.get<PersonsController>(PersonsController);

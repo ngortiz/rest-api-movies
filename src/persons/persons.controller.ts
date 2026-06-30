@@ -35,9 +35,12 @@ export class PersonsController {
   }
 
   @Get()
-  async findAll(
-    @Query() paginationDto: PaginationDto,
-  ): Promise<{ data: PersonEntity[]; total: number; page: number; limit: number }> {
+  async findAll(@Query() paginationDto: PaginationDto): Promise<{
+    data: PersonEntity[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
     const { data, total } = await this.personsService.findAll(paginationDto);
     return {
       data: data.map((person) => new PersonEntity(person)),
