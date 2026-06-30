@@ -1,3 +1,5 @@
+import { PrismaService } from '../prisma/prisma.service';
+import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MoviesController } from './movies.controller';
 import { MoviesService } from './movies.service';
@@ -10,11 +12,8 @@ describe('MoviesController', () => {
       controllers: [MoviesController],
       providers: [
         MoviesService,
-        {
-          provide: require('../prisma/prisma.service').PrismaService,
-          useValue: {},
-        },
-        { provide: require('@nestjs/jwt').JwtService, useValue: {} },
+        { provide: PrismaService, useValue: {} },
+        { provide: JwtService, useValue: {} },
       ],
     }).compile();
 

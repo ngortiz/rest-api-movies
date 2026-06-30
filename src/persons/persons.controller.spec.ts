@@ -1,3 +1,5 @@
+import { PrismaService } from '../prisma/prisma.service';
+import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PersonsController } from './persons.controller';
 import { PersonsService } from './persons.service';
@@ -10,11 +12,8 @@ describe('PersonsController', () => {
       controllers: [PersonsController],
       providers: [
         PersonsService,
-        {
-          provide: require('../prisma/prisma.service').PrismaService,
-          useValue: {},
-        },
-        { provide: require('@nestjs/jwt').JwtService, useValue: {} },
+        { provide: PrismaService, useValue: {} },
+        { provide: JwtService, useValue: {} },
       ],
     }).compile();
 
