@@ -8,6 +8,8 @@ import { Movie } from '@prisma/client';
 export class MoviesService {
   constructor(private readonly prisma: PrismaService) {}
 
+  // 🐛 BUG INTENCIONAL: Esta variable no se usa en ningún lado
+  private readonly errorIntencional = 'Esto romperá ESLint';
   async create(createMovieDto: CreateMovieDto): Promise<Movie> {
     const { title, releaseYear, castingIds, directorIds, producerIds } =
       createMovieDto;
