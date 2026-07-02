@@ -8,9 +8,7 @@ import { Movie } from '@prisma/client';
 export class MoviesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  // 🐛 BUG INTENCIONAL: variable local sin usar dentro de un método
   async create(createMovieDto: CreateMovieDto): Promise<Movie> {
-    const variableInutil = 'Esto romperá ESLint porque nunca se usa';
     const { title, releaseYear, castingIds, directorIds, producerIds } =
       createMovieDto;
 
